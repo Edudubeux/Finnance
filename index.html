@@ -10,7 +10,32 @@
 </head>
 
 <body>
+    <select id="select" class="form-control" aria-label="Default select example">
+        <option selected>Tipo</option>
+        <option value="1">Entrada</option>
+        <option value="2">Saída</option>
+    </select>
 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="color: #fff;" class="bg-primary" scope="col">Data</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Cliente</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Telefone do Cliete</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Loja</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Telefone da loja</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Tipo</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Quantidade</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Preço unitário</th>
+                <th style="color: #fff;" class="bg-primary" scope="col">Preço total</th>
+            </tr>
+        </thead>
+
+        <tbody id="tbody">
+        </tbody>
+    </table>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="index.js"></script>
 </body>
 
