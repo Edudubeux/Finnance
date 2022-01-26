@@ -7,80 +7,67 @@ const init = () => {
             .then(data => {
                 localStorage.setItem('data', JSON.stringify(data));
                 renderTable(data);
-                filter(data)
+                filter()
             });
         return;
     }
 
     renderTable(JSON.parse(localStorage.data));
-    filter(JSON.parse(localStorage.data));
+    filter();
 };
+
+const convertPrice = value => value.toLocaleString('pt-br', {
+    style: 'currency', 
+    currency: 'BRL'
+});
 
 const renderTable = data => {
     const tbody = document.getElementById('tbody');
     let tr = '';
-    let type = '';
+    const type = {
+        IN: 'Entrada',
+        OUT: 'Saída'
+    };
 
     data.forEach(value => {
-        if (value.type === 'OUT') {
-            type = "Saída";
-        }
-
-        if (value.type === 'IN') {
-            type = "Entrada";
-        }
+        const parsedType = type[value.type];
 
         tr += `
-        <tr>
-            <th scope="row">${new Date(value.date).toLocaleDateString('pt-BR')}</th>
-            <td>${value.customer.first_name} ${value.customer.last_name}</td>
-            <td>${value.customer.phone}</td>
-            <td>${value.store.name}</td>
-            <td>${value.store.phone}</td>
-            <td>${type}</td>
-            <td>${value.amount}</td>
-            <td>R$ ${value.price.toFixed(2)}</td>
-            <td>R$ ${(value.amount * value.price).toFixed(2)}</td>
-        </tr>
-        `
+            <tr>
+                <th scope="row">${new Date(value.date).toLocaleDateString('pt-BR')}</th>
+                <td>${value.customer.first_name} ${value.customer.last_name}</td>
+                <td>${value.customer.phone}</td>
+                <td>${value.store.name}</td>
+                <td>${value.store.phone}</td>
+                <td>${parsedType}</td>
+                <td>${value.amount}</td>
+                <td>${convertPrice(value.price)}</td>
+                <td>${convertPrice(value.amount * value.price)}</td>
+            </tr>
+        `;
     });
 
     tbody.innerHTML = tr;
-    return;
 };
 
 const balance = obj => {
     const result = document.getElementById('total');
     const ins = document.getElementById('ins');
     const outs = document.getElementById('outs');
-
-    const outPrices = [];
-    const inPrices = [];
-
-    let totalOuts = 0;
-    let totalIns = 0;
+    const prices = {
+        IN: 0,
+        OUT: 0
+    };
 
     obj.forEach(value => {
-        if (value.type === 'OUT') {
-            outPrices.push(value.amount * value.price);
-            totalOuts = outPrices.reduce((acc, value) => {
-                return acc + value;
-            });
-        }
-
-        if (value.type === 'IN') {
-            inPrices.push(value.amount * value.price);
-            totalIns = inPrices.reduce((acc, value) => {
-                return acc + value;
-            });
-        }
+        prices[value.type] += value.amount * value.price;
     });
 
-    const total = totalIns - totalOuts;
+    const total = prices.IN - prices.OUT;
 
-    ins.innerHTML = `Total de entradas: R$ ${totalIns.toFixed(2)}`;
-    outs.innerHTML = `Total de saídas: R$ ${totalOuts.toFixed(2)}`;
-    result.innerHTML = `Saldo: R$ ${total.toFixed(2)}`;
+    ins.innerHTML = `Total de entradas: ${convertPrice(prices.IN)}`;
+    outs.innerHTML = `Total de saídas: ${convertPrice(prices.OUT)}`;
+    result.innerHTML = `Saldo: ${convertPrice(total)}`;
 }
 
 const filter = () => {
@@ -88,23 +75,16 @@ const filter = () => {
     const data = JSON.parse(obj);
 
     const select = document.getElementById('select');
-    let isValid = false;
+    const dataFiltered = data.filter(value => select.value === value.type );
 
-    const dataFiltered = data.filter(value => {
-        if (select.value === value.type) {
-            return isValid = true;
-        }
-    });
-
-    if (!isValid) {
+    if (!dataFiltered.length) {
         renderTable(data);
         balance(data)
         return;
     }
-
-    renderTable(dataFiltered);
+    
     balance(dataFiltered);
-    return;
+    renderTable(dataFiltered);
 };
 
 init();
