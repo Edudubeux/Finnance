@@ -1,5 +1,5 @@
 const init = () => {
-    if (!localStorage.data) {
+    if (!localStorage.getItem('data')) {
         fetch('data.json')
             .then(response => {
                 return response.json();
@@ -7,27 +7,28 @@ const init = () => {
             .then(data => {
                 localStorage.setItem('data', JSON.stringify(data));
                 renderTable(data);
-                return;
+                filter(data)
             });
-    };
-    return;
-}
+        return;
+    }
 
-const data = JSON.parse(localStorage.data);
+    renderTable(JSON.parse(localStorage.data));
+    filter(JSON.parse(localStorage.data));
+};
 
 const renderTable = data => {
-    const tbody = document.getElementById('tbody')
+    const tbody = document.getElementById('tbody');
     let tr = '';
     let type = '';
 
     data.forEach(value => {
         if (value.type === 'OUT') {
             type = "Saída";
-        };
+        }
 
         if (value.type === 'IN') {
             type = "Entrada";
-        };
+        }
 
         tr += `
         <tr>
@@ -83,25 +84,27 @@ const balance = obj => {
 }
 
 const filter = () => {
-    const select = document.getElementById('select');
+    const obj = localStorage.getItem('data');
+    const data = JSON.parse(obj);
 
-    if (select.value === 'default') {
-        renderTable(data);
-        balance(data)
-        return;
-    };
+    const select = document.getElementById('select');
+    let isValid = false;
 
     const dataFiltered = data.filter(value => {
         if (select.value === value.type) {
-            return true;
+            return isValid = true;
         }
     });
+
+    if (!isValid) {
+        renderTable(data);
+        balance(data)
+        return;
+    }
 
     renderTable(dataFiltered);
     balance(dataFiltered);
     return;
 };
 
-renderTable(data);
-filter()
 init();
