@@ -5,3 +5,9 @@
     background-color: #007bff!important;
     color: #fff;
 }
+
+#results{
+    margin-left: 55%;
+    margin-bottom: 5px;
+    font-weight: bold;
+}

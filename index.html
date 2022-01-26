@@ -10,11 +10,17 @@
 </head>
 
 <body>
-    <select id="select" class="form-control" aria-label="Default select example">
-        <option selected>Tipo</option>
-        <option value="1">Entrada</option>
-        <option value="2">Saída</option>
+    <select id="select" class="form-control" aria-label="Default select example" onchange="filter()">
+        <option style="background-color: #fff; color: black;" value="default">Tipo</option>
+        <option class="options" style="background-color: #fff; color: black;" value="IN">Entrada</option>
+        <option class="options" style="background-color: #fff; color: black;" value="OUT">Saída</option>
     </select>
+
+    <div id="results">
+        <span id="ins" style="margin-right: 30px; color: rgb(41, 184, 41);"></span>
+        <span id="outs" style="margin-right:30px; color: rgb(201, 46, 46);"></span>
+        <span id="total" style="color: #007bff!important;"></span>
+    </div>
 
     <table class="table table-striped">
         <thead>
