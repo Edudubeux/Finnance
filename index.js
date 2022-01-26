@@ -78,8 +78,8 @@ const balance = obj => {
     const total = totalIns - totalOuts;
 
     ins.innerHTML = `Total de entradas: R$ ${totalIns.toFixed(2)}`;
-    outs.innerHTML = `Total de saídas R$ ${totalOuts.toFixed(2)}`;
-    result.innerHTML = `Saldo R$ ${total.toFixed(2)}`;
+    outs.innerHTML = `Total de saídas: R$ ${totalOuts.toFixed(2)}`;
+    result.innerHTML = `Saldo: R$ ${total.toFixed(2)}`;
 }
 
 const filter = () => {
